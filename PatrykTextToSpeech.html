@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patryk Text-to-Speech</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/voc.js"></script>
+
+
+  <script>
+    $(document).ready(function() {
+      // JSON representing audio segments
+
+
+      var audioSegments = {
+        "audioSegments": [
+          {
+            "word": "Hello",
+            "audioFile": "hello.wav"
+          },
+          {
+            "word": "world",
+            "audioFile": "world.wav"
+          }
+        ]
+      };
+
+
+
+      // Function to play audio segments
+      function playAudioSegments(segments, index) {
+        if (index >= segments.length) {
+          return;
+        }
+
+        var segment = segments[index];
+        var audio = new Audio(segment.audioFile);
+        audio.play();
+
+        audio.onended = function() {
+          playAudioSegments(segments, index + 1);
+        };
+      }
+
+      // Event listener for button click
+      $("#playButton").click(function() {
+        var inputText = $("#textInput").val();
+        var words = inputText.split(" ");
+        var segments = [];
+
+        for (var i = 0; i < words.length; i++) {
+          var word = words[i];
+          for (var j = 0; j < audioSegments.audioSegments.length; j++) {
+            var segment = audioSegments.audioSegments[j];
+            if (segment.word.toLowerCase() === word.toLowerCase()) {
+              segments.push(segment);
+              break;
+            }
+          }
+        }
+
+        playAudioSegments(segments, 0);
+      });
+    });
+  </script>
+
+
+</head>
+
+<body>
+  <input type="text" id="textInput" placeholder="Enter text">
+  <button id="playButton">Play</button>
+</body>
+
+</html>
