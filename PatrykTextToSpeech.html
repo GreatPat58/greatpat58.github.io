@@ -1,74 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Patryk Text-to-Speech</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/voc.js"></script>
-
-
-  <script>
-    $(document).ready(function() {
-      // JSON representing audio segments
-
-
-      var audioSegments = {
-        "audioSegments": [
-          {
-            "word": "Hello",
-            "audioFile": "hello.wav"
-          },
-          {
-            "word": "world",
-            "audioFile": "world.wav"
-          }
-        ]
-      };
-
-
-
-      // Function to play audio segments
-      function playAudioSegments(segments, index) {
-        if (index >= segments.length) {
-          return;
-        }
-
-        var segment = segments[index];
-        var audio = new Audio(segment.audioFile);
-        audio.play();
-
-        audio.onended = function() {
-          playAudioSegments(segments, index + 1);
-        };
-      }
-
-      // Event listener for button click
-      $("#playButton").click(function() {
-        var inputText = $("#textInput").val();
-        var words = inputText.split(" ");
-        var segments = [];
-
-        for (var i = 0; i < words.length; i++) {
-          var word = words[i];
-          for (var j = 0; j < audioSegments.audioSegments.length; j++) {
-            var segment = audioSegments.audioSegments[j];
-            if (segment.word.toLowerCase() === word.toLowerCase()) {
-              segments.push(segment);
-              break;
-            }
-          }
-        }
-
-        playAudioSegments(segments, 0);
-      });
-    });
-  </script>
-
-
+    <title>GreatPat58 | LTA</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+<body style="text-align: center;">
 
-<body>
-  <input type="text" id="textInput" placeholder="Enter text">
-  <button id="playButton">Play</button>
+  <header>
+    <div class="logo">
+      <h1>GreatPat58</h1>
+    </div>
+    <div class="buttons">
+      <a class="button" href="index.html">Home</a>
+      <a class="button" href="#">Letter to Audio</a>
+    </div>
+  </header>
+    <i>Work In Progress...</i>
+    <h1>GreatPat58 Letter to Audio</h1>
+    <textarea id="inputText" rows="4" cols="50"></textarea><br>
+    <button onclick="playText()">Play</button>
+    <!-- <button onclick="downloadAudio()">Download Audio</button> --><br><br>
+
+    <div id="letterButtons">
+        <p>vowels</p>
+        <button onclick="addLetter('ɛ')">ɛ</button>
+        <button onclick="addLetter('ə')">ə</button>
+        <button onclick="addLetter('ʊ')">ʊ</button>
+        <p>consonants</p>
+        <button onclick="addLetter('h')">h</button>
+        <button onclick="addLetter('l')">l</button>
+        <!-- Add more buttons for other letters -->
+    </div>
+
+    <script>
+        var audioData = []; // Array to store the audio data
+
+        function playText() {
+            var input = document.getElementById('inputText').value.trim();
+            var audioElements = [];
+            var audioIndex = 0;
+            var delay = 0; // Adjust this value to control the delay between each letter (in milliseconds)
+
+            var punctuationAudioFiles = {
+                '.': 'dot.wav',
+                ',': 'comma.wav',
+                '?': 'question.wav',
+                '!': 'exclamation.wav',
+                // Add more punctuation marks as needed
+            };
+
+            for (var i = 0; i < input.length; i++) {
+                var character = input.charAt(i);
+                var audioFile;
+
+                if (punctuationAudioFiles.hasOwnProperty(character)) {
+                    audioFile = punctuationAudioFiles[character];
+                } else {
+                    audioFile = character.toLowerCase() + '.wav';
+                }
+
+                var audio = new Audio('pathtoaudio/' + audioFile); // Update the path to audio files
+                audioElements.push(audio);
+                audioData.push(audioFile); // Add audio file name to audioData array
+            }
+
+            function playNextAudio() {
+                if (audioIndex < audioElements.length) {
+                    var audio = audioElements[audioIndex];
+                    audio.play();
+                    audioIndex++;
+                    audio.onended = function () {
+                        setTimeout(playNextAudio, delay);
+                    };
+                }
+            }
+
+            playNextAudio();
+        }
+
+        function addLetter(letter) {
+            var inputText = document.getElementById('inputText');
+            inputText.value += letter;
+        }
+
+        function downloadAudio() {
+            if (audioData.length === 0) {
+                alert('No audio available to download.');
+                return;
+            }
+
+            var audioBlob = new Blob(audioData, { type: 'audio/wav' });
+            var audioURL = URL.createObjectURL(audioBlob);
+            var downloadLink = document.createElement('a');
+            downloadLink.href = audioURL;
+            downloadLink.download = 'text_to_speech.wav';
+            downloadLink.click();
+        }
+    </script>
 </body>
-
 </html>

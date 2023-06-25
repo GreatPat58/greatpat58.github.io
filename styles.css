@@ -1,0 +1,49 @@
+body {
+  font-family: "Arial", sans-serif;
+}
+
+header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background: linear-gradient(to right, #fd746c, #ff9068); /* Adjust the gradient colors as per your preference */
+      color: white;
+    }
+    
+    /* Style for the logo */
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Style for the logo image */
+    .logo img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    /* Style for the buttons */
+    .buttons {
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Style for the button */
+    .buttons .button {
+      margin-left: 10px;
+      padding: 8px 16px;
+      background-color: white;
+      color: #fd746c; /* Adjust the button text color as per your preference */
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .buttons .button:hover {
+      background-color: #fd746c; /* Adjust the button hover background color as per your preference */
+      color: white; /* Adjust the button hover text color as per your preference */
+    }
